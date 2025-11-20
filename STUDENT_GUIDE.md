@@ -87,8 +87,9 @@ An AI chatbot that:
 
 ### Report & Export
 - **Report:** Generated after 10 messages
-- **CSV Export:** Run Cell 21
-- **Reset:** Run Cell 23 (new conversation)
+- **CSV Export:** Run Cell 22
+- **Visualizations:** Run Cell 25 (line graph), Cell 27 (bar chart) - requires 3+ messages
+- **Reset:** Run Cell 24 (new conversation)
 
 ### Tips to Improve Score
 
@@ -102,6 +103,50 @@ An AI chatbot that:
 - Closed questions ("Did you?")
 - Judging ("You shouldn't feel...")
 - Dismissing ("It's not a big deal")
+
+---
+
+## Viewing Empathy Visualizations
+
+After chatting for **at least 3 messages**, you can view interactive graphs showing your empathy progress.
+
+### Available Visualizations
+
+**Cell 25: Line Graph** - Shows empathy trend across all messages
+- Overall score progression
+- Interactive hover to see exact scores
+- HTML export available
+
+**Cell 27: Multi-Dimension Bar Chart** - Breakdown of 5 dimensions
+- Compare warmth, questions, emotions, perspective, listening
+- See which areas are strongest/weakest
+- Helps identify specific skills to improve
+
+### How to View
+1. Send at least 3 messages in the chat
+2. Run **Cell 25** for line graph
+3. Run **Cell 27** for bar chart
+4. Graphs appear below the cell with interactive features
+
+**💡 Tip:** After 10 messages (when report generates), visualizations become more meaningful!
+
+---
+
+## Source Citations
+
+The chatbot can **show which PDFs** were used to answer your question.
+
+### How to Enable/Disable
+
+In **Cell 8**, find this setting:
+```python
+SHOW_SOURCES = True  # Set to False to hide sources
+```
+
+- **True:** Shows source documents below each answer (helpful for verification)
+- **False:** Clean answers only (better for conversational flow)
+
+**Default:** `True` (sources shown)
 
 ---
 
@@ -122,20 +167,14 @@ When enabled, the bot remembers recent exchanges:
 
 ### How to Test If Memory Works
 
-**Option 1: Quick Test (Cell 5B)**
-1. Run Cell 10 (API test) first
-2. Run **Cell 5B: Test Conversation Memory**
-3. Check output shows message structure
-4. Verify it says "✅ PASS - Memory structure is correct"
-
-**Option 2: Live Test with Debug Mode**
+**Option 1: Live Test with Debug Mode**
 1. Set `DEBUG_MEMORY = True` in Cell 8
-2. Run all cells through Cell 19 (launch chat)
+2. Run all cells through Cell 20 (launch chat)
 3. In the console, you'll see message structure for each response
 4. Check that history pairs are included
 
-**Option 3: Real Conversation Test**
-1. Launch chat (Cell 19)
+**Option 2: Real Conversation Test**
+1. Launch chat (Cell 20)
 2. Ask: **"What are your main beliefs?"**
 3. Bot answers
 4. Ask: **"Tell me more"** or **"Why is that important?"**
@@ -171,7 +210,6 @@ When `DEBUG_MEMORY = True`, you'll see:
 |-------|----------|
 | Bot doesn't remember context | Check `CONVERSATION_MEMORY > 0` in Cell 8 |
 | Debug output not showing | Set `DEBUG_MEMORY = True` in Cell 8 |
-| Cell 5B test fails | Check CONVERSATION_MEMORY value, restart runtime |
 | Memory seems too short | Increase CONVERSATION_MEMORY to 5 or 10 |
 | Responses too slow | Reduce CONVERSATION_MEMORY to 2 or 3 |
 
@@ -213,8 +251,9 @@ When `DEBUG_MEMORY = True`, you'll see:
 ```
 First Setup → Run All → Authorize Drive → Wait for "Model loading" (30s)
            → Copy public link → Open in NEW tab → Start chatting
-After 10 messages → Run Cell 21 (export CSV)
-New conversation → Run Cell 23 (reset)
+After 10 messages → Run Cell 22 (export CSV) + Cell 25/27 (visualizations)
+Modify settings → Edit Cell 8 → Re-run from Cell 8 onwards
+New conversation → Run Cell 24 (reset)
 ```
 
 ### Key Settings (Cell 8)
@@ -222,6 +261,8 @@ New conversation → Run Cell 23 (reset)
 ```python
 MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B-Instruct"  # ✅ Verified working
 TEMPERATURE = 0.7  # 0.3=focused, 1.0=creative
+CONVERSATION_MEMORY = 3  # Remember last 3 exchanges (0=off, 10=long)
+DEBUG_MEMORY = False  # True=show message structure in console
 SHOW_SOURCES = True  # Show which PDFs used
 ```
 

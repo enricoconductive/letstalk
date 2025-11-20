@@ -13,18 +13,24 @@ This project creates a customizable RAG (Retrieval-Augmented Generation) chatbot
 ## Current Status
 ✅ **FULLY FUNCTIONAL** - All critical issues resolved!
 
-### Notebook: [RAG_Chatbot_Trump_Original.ipynb](./RAG_Chatbot_Trump_Original.ipynb)
+### Notebook: [RAG_Chatbot_HuggingFace.ipynb](./RAG_Chatbot_HuggingFace.ipynb) - 31 cells
 - ✅ Complete end-to-end RAG implementation
 - ✅ **Async Gradio chat interface** (no hanging!)
 - ✅ **Threading-based timeout** (reliable 30-second limit)
+- ✅ **Conversation memory** (last 3 exchanges, configurable)
+- ✅ **Empathy tracking** (5 dimensions, 10-message reports)
+- ✅ **Interactive visualizations** (Plotly line/bar charts)
+- ✅ **Source citations** (toggle-able PDF references)
+- ✅ **Debug mode** (conversation memory inspection)
 - ✅ Comprehensive documentation
 - ✅ Student-friendly with detailed comments
 - ✅ Easy persona customization
 - ✅ Robust error handling with visible error messages
-- ✅ Works with standard `generate_content()` API
+- ✅ Works with Meta-Llama-3.1-8B-Instruct (HuggingFace API)
+- ✅ Hong Kong compatible (no VPN required)
 
 ### ✅ Setup Complete!
-**Last Session:** November 3, 2025 (Session 5 - THREADING FIX)
+**Last Session:** November 20, 2025 (Session 10 - VISUALIZATIONS + CRITICAL FIXES)
 
 **🔥 CRITICAL GRADIO HANGING ISSUE - RESOLVED! 🔥**
 
@@ -456,6 +462,174 @@ messages.append({"role": "user", "content": question})  # Current question
 - No functional changes to core RAG implementation
 - Zero performance impact (debug disabled by default)
 
+### Session 10: EMPATHY VISUALIZATIONS + CRITICAL FIXES
+**Date:** November 20, 2025
+**Branches:** `feature/empathy-visualization` (merged), main
+**Purpose:** Add interactive visualizations for empathy progress + fix critical missing database cell
+
+**Part 1: Empathy Visualizations (Merged from feature branch)**
+
+**Problem:** Students wanted to see their empathy improvement visually, not just text reports.
+
+**Solution:** Added interactive Plotly graphs showing empathy scores across conversation.
+
+**Changes Implemented:**
+
+1. ✅ **Cell 25: Line Graph - Overall Score Progression**
+   - Shows total empathy score (0-100) for each message
+   - Interactive hover displays exact scores
+   - Minimum 3 messages required to generate
+   - HTML export capability
+   - Clean, professional visualization
+
+2. ✅ **Cell 27: Multi-Dimension Bar Chart**
+   - Breakdown of all 5 dimensions (warmth, questions, emotions, perspective, listening)
+   - Side-by-side comparison shows strengths/weaknesses
+   - Interactive hover with dimension names
+   - Helps students identify specific skills to improve
+   - Color-coded for clarity
+
+**Technical Implementation:**
+```python
+# Cell 25 - Line graph showing overall empathy trend
+import plotly.graph_objects as go
+
+message_numbers = list(range(1, len(empathy_history) + 1))
+total_scores = [entry['total_score'] for entry in empathy_history]
+
+fig = go.Figure(data=go.Scatter(
+    x=message_numbers,
+    y=total_scores,
+    mode='lines+markers',
+    marker=dict(size=10, color='blue'),
+    line=dict(width=2, color='blue')
+))
+
+fig.update_layout(
+    title="Empathy Score Progress",
+    xaxis_title="Message Number",
+    yaxis_title="Empathy Score (0-100)",
+    yaxis_range=[0, 100]
+)
+
+fig.show()
+```
+
+**User Feedback:** "Excellent, it worked" - visualization merged to main branch.
+
+**Part 2: CRITICAL FIX - Missing Vector Database Cell**
+
+**Problem Discovered:** User reported three issues:
+1. "I didn't see the chatbot load the chunks in the database, did I miss that block?"
+2. "It doesn't speak much like trump, it is very plain"
+3. "It says many times that it doesn't have the information, even though I know it's there in the pdfs"
+
+**Root Cause:** Cell 16 (vector database creation) was **COMPLETELY MISSING** from notebook!
+
+**Impact:**
+- No embedding model created
+- No ChromaDB collection created
+- No chunks loaded into database
+- Retrieval functions would crash
+- Bot couldn't find ANY information from PDFs
+- Bot responded generically: "I don't have that information"
+
+**Solution:** Created new Cell 16 with complete 5-step database creation process:
+
+```python
+# Cell 16 - Vector Database Creation
+print("🔧 Creating vector database...")
+
+# Step 1: Load embedding model
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Step 2: Create embeddings for all chunks
+embeddings = embedding_model.encode(all_chunks, show_progress_bar=True)
+
+# Step 3: Initialize ChromaDB
+chroma_client = chromadb.Client(Settings(anonymized_telemetry=False, allow_reset=True))
+
+# Step 4: Create collection
+collection = chroma_client.create_collection(name="persona_documents")
+
+# Step 5: Add documents in batches
+for i in range(0, len(all_chunks), 100):
+    batch_end = min(i + 100, len(all_chunks))
+    collection.add(
+        documents=all_chunks[i:batch_end],
+        embeddings=embeddings[i:batch_end].tolist(),
+        metadatas=metadata[i:batch_end],
+        ids=[f"chunk_{j}" for j in range(i, batch_end)]
+    )
+    print(f"   📦 Uploaded chunks {i+1}-{batch_end}/{len(all_chunks)}")
+
+print(f"✅ Vector database created! Total chunks: {collection.count()}")
+```
+
+**Part 3: Improved Persona Expression**
+
+**Problem:** Bot responses too generic, lacking personality despite detailed persona.
+
+**Root Causes:**
+- Prompt too restrictive ("Answer using ONLY")
+- Max tokens too low (75 tokens ≈ 50 words)
+- Context too small (2000 chars)
+
+**Solution:**
+1. ✅ Rewrote system prompt to prioritize persona expression:
+   - Changed "Answer using ONLY" → "Use the information below from your documents to answer the question. Present the facts in your authentic voice and style"
+   - Added "Stay in character - use your typical speaking style, mannerisms, and vocabulary"
+   - Made grounding instructions less restrictive
+2. ✅ Increased max_tokens: 75 → 200 (~50 → ~150 words)
+3. ✅ Increased context: 2000 → 3000 chars
+4. ✅ Increased chunks: 2 → 3 (better fact coverage)
+
+**Updated Cell 19 Parameters:**
+```python
+# Context settings
+context_docs = context_docs[:3]  # Top 3 chunks (was 2)
+context = context[:3000]  # 3000 chars max (was 2000)
+
+# Output settings
+max_tokens=200  # ~150 words (was 75)
+temperature=0.7  # Unchanged
+
+# Persona-first prompt
+"Use the information below from your documents to answer the question.
+Present the facts in your authentic voice and style."
+```
+
+**Part 4: Duplicate Cell Cleanup**
+
+**Problem:** Cell 17 and Cell 19 both contained identical retrieve/generate functions (8,269 vs 7,223 chars).
+
+**Difference:** Cell 17 had DEBUG_MEMORY feature, Cell 19 didn't (older version).
+
+**Solution:**
+1. Copied complete code from Cell 17 → Cell 19
+2. Deleted Cell 17
+3. All cells shifted up by 1
+4. Total cells reduced: 32 → 31
+
+**Files Modified:**
+- `RAG_Chatbot_HuggingFace.ipynb`:
+  - Cell 16 (NEW): Vector database creation with progress display
+  - Cell 19 (UPDATED): Improved persona prompt, increased tokens/context
+  - Cell 17 (DELETED): Removed duplicate
+  - Cell 25 (NEW): Line graph visualization
+  - Cell 27 (NEW): Bar chart visualization
+- `README.md`: Updated with current features
+- `STUDENT_GUIDE.md`: Added visualization section, updated cell numbers
+
+**Commits:**
+1. "Add empathy visualization (Cells 25, 27) with Plotly"
+2. "CRITICAL FIX: Add missing vector database creation + improve persona"
+3. "Remove duplicate cell - cleanup after database insertion"
+
+**Result:** ✅ **All issues resolved!** Database creation visible, persona personality restored, retrieval working correctly, visualizations merged. Notebook now has 31 cells with complete RAG pipeline.
+
+**User Feedback:** "Excellent, it worked, can you make sure that everything is on the main file" - All changes committed to main branch.
+
 ---
 
 ## 🔧 Technical Implementation Details
@@ -863,41 +1037,45 @@ max_output_tokens = 200  # Reduced from 500
 
 ## 📁 Repository Structure
 ```
-RAG_Chatbot_Trump_Persona/
+Let's Talk - RAG Bot (basic) version/
 │
-├── RAG_Chatbot_Trump_Original.ipynb        # Original notebook (Gemini API)
-│   ├── Cell 2:  Install libraries
-│   ├── Cell 4:  Import libraries (includes asyncio)
+├── RAG_Chatbot_HuggingFace.ipynb ⭐ CURRENT VERSION (31 cells)
+│   ├── Cell 2:  Install libraries (huggingface_hub, sentence-transformers, etc.)
+│   ├── Cell 4:  Import libraries (asyncio, InferenceClient, chromadb, etc.)
 │   ├── Cell 6:  Mount Google Drive
-│   ├── Cell 8:  Configuration (API key, PDFs, persona)
-│   ├── Cell 10: API connection test
-│   ├── Cell 12: PDF processing
-│   ├── Cell 14: Vector database creation
-│   ├── Cell 16: Threading + Async RAG function ⭐ CRITICAL
-│   └── Cell 17: Async Gradio interface ⭐ CRITICAL
+│   ├── Cell 8:  Configuration (HF token, PDFs, persona, memory settings)
+│   ├── Cell 10: HuggingFace API test (chat_completion with Meta-Llama-3.1-8B)
+│   ├── Cell 12: PDF processing (PyPDF2, text extraction)
+│   ├── Cell 14: Text chunking (1000 chars, 200 overlap)
+│   ├── Cell 16: Vector database creation (ChromaDB + embeddings) ⭐ CRITICAL
+│   ├── Cell 18: EmpathyAnalyzer class (5 dimensions, VADER sentiment)
+│   ├── Cell 19: Async RAG function (retrieval + generation + memory) ⭐ CRITICAL
+│   ├── Cell 20: Gradio chat interface (empathy tracking, 30s timeout)
+│   ├── Cell 22: CSV export (conversation + empathy scores)
+│   ├── Cell 24: Conversation reset (one-click restart)
+│   ├── Cell 25: Visualization - Line graph (overall score progression)
+│   └── Cell 27: Visualization - Bar chart (5-dimension breakdown)
 │
-├── RAG_Chatbot_Trump_Student_Basic.ipynb   # Empathy tracking (Gemini API)
-│   ├── All cells from Original PLUS:
-│   ├── Cell 18: EmpathyAnalyzer class (5 dimensions, VADER)
-│   ├── Cell 19: Chat interface with empathy tracking
-│   ├── Cell 21: CSV export functionality
-│   └── Cell 23: One-click conversation reset
+├── RAG_Chatbot_Trump_Original.ipynb        # 🔒 Archived (Gemini API, basic)
+├── RAG_Chatbot_Trump_Student_Basic.ipynb   # 🔒 Archived (Gemini API, empathy)
 │
-├── RAG_Chatbot_Trump_Student_HuggingFace.ipynb # 🌏 Hong Kong version (HuggingFace API)
-│   ├── Cell 2:  Install huggingface_hub library
-│   ├── Cell 4:  Import InferenceClient from huggingface_hub
-│   ├── Cell 8:  HuggingFace client configuration + Meta-Llama-3.1-8B model
-│   ├── Cell 10: HuggingFace API test (chat_completion)
-│   ├── Cell 16: HuggingFace chat_completion() with RAG
-│   └── Same empathy tracking as Basic (Cells 18, 19, 21, 23)
-│
-├── STUDENT_GUIDE.md                        # Student tutorial (226 lines, streamlined)
-├── CLAUDE.md                               # This file - technical documentation
+├── README.md                               # Project overview + quick start
+├── STUDENT_GUIDE.md                        # Student tutorial (~280 lines)
+├── claude.md                               # This file - technical documentation
 ├── .gitignore                              # Git exclusion rules
 ├── config_personal.py                      # 🔒 EXCLUDED - Personal credentials
 └── .claude/
     └── init                                # Project initialization
 ```
+
+**Key Features by Cell:**
+- **Cells 1-6:** Setup (libraries, imports, Drive mount)
+- **Cells 8-16:** Configuration + RAG pipeline (PDF → chunks → embeddings → database)
+- **Cells 18-20:** Empathy analysis + chat interface
+- **Cells 22-24:** Data export + conversation management
+- **Cells 25-27:** Interactive visualizations (Plotly)
+
+**Total Cells:** 31 (down from 32 after duplicate removal in Session 10)
 
 ---
 
@@ -1142,30 +1320,41 @@ git check-ignore -v config_personal.py
 
 **Project Status:** ✅ FULLY FUNCTIONAL + ENHANCED + HONG KONG COMPATIBLE
 
-**Last Updated:** November 17, 2025 (Session 8 - HuggingFace API Fix + Mistral Migration)
+**Last Updated:** November 20, 2025 (Session 10 - Visualizations + Critical Fixes)
 
 **Critical Issues:**
 - ✅ RESOLVED - Threading + async implementation prevents hanging
 - ✅ RESOLVED - HuggingFace API token permissions (now using chat_completion)
+- ✅ RESOLVED - Missing vector database cell (Cell 16 added)
+- ✅ RESOLVED - Duplicate cells removed (Cell 17 deleted, 32→31 cells)
+- ✅ RESOLVED - Persona expression improved (200 tokens, 3000 chars context)
 
-**Three Versions Available:**
-1. **Original** (RAG_Chatbot_Trump_Original.ipynb) - Base chatbot, Gemini API
-2. **Basic** (RAG_Chatbot_Trump_Student_Basic.ipynb) - Empathy tracking, Gemini API, 10-message reports
-3. **HuggingFace** (RAG_Chatbot_Trump_Student_HuggingFace.ipynb) - Empathy tracking, HuggingFace API (Meta-Llama-3.1-8B), Hong Kong compatible, 100% free
+**Current Version:**
+**RAG_Chatbot_HuggingFace.ipynb** (31 cells) - Full-featured empathy training chatbot
+- Empathy tracking (5 dimensions, VADER sentiment analysis)
+- Conversation memory (configurable, 3 exchanges default)
+- Interactive visualizations (Plotly line/bar charts)
+- Source citations (toggle-able)
+- Debug mode (memory inspection)
+- HuggingFace API (Meta-Llama-3.1-8B-Instruct)
+- Hong Kong compatible (no VPN)
+- 100% free (~300 req/hr)
 
 **Tested & Working:**
-- ✅ API connection (Cell 10) - both Gemini and HuggingFace
+- ✅ API connection (Cell 10) - HuggingFace with Meta-Llama-3.1-8B
 - ✅ PDF processing (Cell 12)
-- ✅ Vector database (Cell 14)
-- ✅ Async RAG function (Cell 16)
-- ✅ Gradio interface (Cell 17/19)
+- ✅ Text chunking (Cell 14)
+- ✅ Vector database creation (Cell 16) - ChromaDB with embeddings
+- ✅ Empathy analyzer (Cell 18) - 5 dimensions with VADER
+- ✅ Async RAG function (Cell 19) - Conversation memory + retrieval
+- ✅ Gradio interface (Cell 20) - 30-second timeout
+- ✅ CSV export (Cell 22) - Full conversation + scores
+- ✅ Conversation reset (Cell 24) - One-click restart
+- ✅ Visualizations (Cells 25, 27) - Line graph + bar chart
 - ✅ Error handling & timeouts
-- ✅ Debug mode visibility
-- ✅ Empathy tracking (5 dimensions, VADER)
-- ✅ CSV export with conversation + scores
-- ✅ One-click reset
+- ✅ Debug mode (DEBUG_MEMORY toggle)
 
-**Ready for:** Global student deployment, Hong Kong classrooms, empathy training courses
+**Ready for:** Global student deployment, Hong Kong classrooms, empathy training courses, research studies
 
 **Known Limitations:**
 - Free API tiers have rate limits (HuggingFace: ~300 req/hr, manageable with individual accounts)

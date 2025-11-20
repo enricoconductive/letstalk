@@ -2,61 +2,61 @@
 
 An educational RAG (Retrieval-Augmented Generation) chatbot that teaches empathic communication skills through interactive conversations. Students practice empathy while chatting with customizable AI personas trained on their own PDF documents.
 
-## Features
+## 🌏 Hong Kong Compatible
 
-- **Three Versions Available:**
-  - `RAG_Chatbot_Original.ipynb` - Basic RAG chatbot (Google Gemini API)
-  - `RAG_Chatbot_Basic.ipynb` - With empathy tracking (Google Gemini API)
-  - `RAG_Chatbot_HuggingFace.ipynb` - Hong Kong compatible, no VPN needed (HuggingFace API)
+Works without VPN using HuggingFace API (~300 requests/hour, 100% free)
 
-- **Empathy Assessment System:**
-  - Real-time analysis of 5 empathy dimensions
-  - Automated scoring and feedback reports
-  - CSV export for research and progress tracking
-  - Based on VADER sentiment analysis + linguistic pattern matching
+## ✨ Features
 
-- **100% Free:**
-  - Google Gemini API (free tier, global access with VPN in China/HK)
-  - HuggingFace Inference API (free tier, ~300 requests/hour, Hong Kong compatible)
-  - Runs on Google Colab (no local setup required)
+**Core Capabilities:**
+- Custom persona chatbot trained on your PDF documents
+- Semantic search with ChromaDB vector database
+- Async interface with 30-second timeout protection
+- Meta-Llama-3.1-8B model (8B parameters, high quality)
 
-- **Fully Customizable:**
-  - Upload your own PDF documents
-  - Create any persona (politicians, historical figures, fictional characters)
-  - Adjust response style, creativity, and context depth
+**Empathy Training:**
+- Real-time analysis of 5 empathy dimensions (warmth, questions, emotions, perspective, listening)
+- Automated scoring and feedback reports after 10 messages
+- Interactive Plotly visualizations showing progress
+- CSV export for research and progress tracking
 
-## Quick Start
+**Conversation Features:**
+- Conversation memory (remembers last 3 exchanges by default)
+- Source citations (shows which PDFs were used)
+- Debug mode for testing and troubleshooting
+- Customizable starter questions
 
-1. **Choose your version:**
-   - Need to work in Hong Kong/China without VPN? → Use HuggingFace version
-   - Have VPN or outside China? → Use Gemini version (faster, higher quality)
+## 🚀 Quick Start
 
-2. **Get API key:**
-   - Gemini: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-   - HuggingFace: [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+1. **Open in Google Colab**: https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/RAG_Chatbot_HuggingFace.ipynb
 
-3. **Follow setup guide:**
-   - See [STUDENT_GUIDE.md](STUDENT_GUIDE.md) for detailed step-by-step instructions
+2. **Get API Token**: https://huggingface.co/settings/tokens
+   - Create "Fine-grained" token with "Inference" permissions enabled
 
-## How It Works
+3. **Setup** (5 minutes):
+   - Upload notebook to Colab
+   - Paste token in Cell 8
+   - Upload PDFs to Google Drive
+   - Click "Runtime → Run All"
+   - Copy public link and open in new tab
 
-1. Upload PDF documents about your chosen persona
-2. System creates searchable vector database (ChromaDB)
-3. Students ask questions in natural language
-4. RAG retrieves relevant context from PDFs
-5. AI generates response in persona's style
-6. Student messages analyzed for empathy markers
-7. After 10 messages, receive comprehensive empathy report
+4. **Start Chatting!**
+   - Ask questions empathically
+   - Receive feedback after 10 messages
+   - View interactive graphs (Cell 25)
+   - Export data as CSV (Cell 23)
 
-## Empathy Dimensions Tracked
+## 📊 Empathy Dimensions Tracked
 
-1. **Sentiment/Warmth** - Positive emotional tone
-2. **Open Questions** - Use of exploratory questions (what/how/why)
-3. **Emotion Recognition** - Acknowledging feelings explicitly
-4. **Perspective-Taking** - "You feel...", "From your view..."
-5. **Active Listening** - "Tell me more", "I understand"
+1. **Sentiment/Warmth** - Positive emotional tone (VADER sentiment analysis)
+2. **Open Questions** - Exploratory questions (what/how/why vs yes/no)
+3. **Emotion Recognition** - Acknowledging feelings explicitly (27 emotion words)
+4. **Perspective-Taking** - "You feel...", "From your view..." (14 key phrases)
+5. **Active Listening** - "Tell me more", "I understand" (13 engagement markers)
 
-## Use Cases
+**Score:** 0-100 scale | **Report:** After 10 messages | **Export:** CSV + HTML graphs
+
+## 🎓 Use Cases
 
 - Communication skills training courses
 - Empathy development workshops
@@ -65,60 +65,77 @@ An educational RAG (Retrieval-Augmented Generation) chatbot that teaches empathi
 - Psychology/counseling practice
 - Research on empathic communication
 
-## Requirements
+## 📚 Documentation
+
+- **[STUDENT_GUIDE.md](STUDENT_GUIDE.md)** - Step-by-step setup tutorial (5 minutes)
+- **[claude.md](claude.md)** - Complete technical documentation & development history
+
+## 🛠️ Technical Stack
+
+- **RAG Framework**: ChromaDB + Sentence Transformers (all-MiniLM-L6-v2)
+- **LLM**: Meta-Llama-3.1-8B-Instruct (HuggingFace Inference API)
+- **Interface**: Gradio (async chat UI with public link sharing)
+- **Empathy Analysis**: VADER sentiment + linguistic pattern matching
+- **Visualizations**: Plotly (interactive graphs with HTML export)
+- **Platform**: Google Colab (Python 3.10+, no local setup)
+
+## ⚙️ Key Configuration Options
+
+```python
+# Cell 8 - Main Settings
+CONVERSATION_MEMORY = 3      # Remember last 3 exchanges (0 = disabled, 10 = long memory)
+DEBUG_MEMORY = False         # Show message structure in console
+SHOW_SOURCES = True          # Display which PDFs were used
+TEMPERATURE = 0.7            # 0.0 = focused, 1.0 = creative
+CHUNK_SIZE = 1000            # Characters per chunk (500-2000 recommended)
+MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B-Instruct"  # Verified compatible
+```
+
+## 🆓 100% Free
+
+- **API**: HuggingFace free tier (~300 requests/hour per account)
+- **Platform**: Google Colab (no local GPU needed)
+- **For Classes**: Each student creates their own free account
+
+## 📋 Requirements
 
 - Google account (for Colab)
 - Internet connection
 - PDF documents (any topic/persona)
-- Free API key (Gemini or HuggingFace)
+- Free HuggingFace token (2-minute signup)
 
-## Technical Stack
+## 📄 License
 
-- **RAG Framework:** ChromaDB + Sentence Transformers
-- **LLMs:** Google Gemini 2.0 Flash / Meta Llama 3.1 8B
-- **Interface:** Gradio (async chat UI)
-- **Empathy Analysis:** VADER sentiment + pattern matching
-- **Platform:** Google Colab (Python 3.10+)
+**CC BY-NC-SA 4.0** (Creative Commons Attribution-NonCommercial-ShareAlike 4.0)
 
-## License
+✅ Use for education and research
+✅ Modify and adapt the code
+✅ Share with attribution
+❌ No commercial use
+⚠️ Modifications must use same license
 
-This project is licensed under **CC BY-NC-SA 4.0** (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International).
+## 📖 Citation
 
-**You are free to:**
-- Use for education and research
-- Modify and adapt the code
-- Share with attribution
-
-**Restrictions:**
-- No commercial use
-- Modifications must use same license
-- Must provide attribution
-
-See [LICENSE](LICENSE) for full terms.
-
-## Documentation
-
-- **[STUDENT_GUIDE.md](STUDENT_GUIDE.md)** - Complete setup tutorial
-- **[claude.md](claude.md)** - Technical documentation and development history
-
-## Citation
-
-If you use this project in your research, please cite:
+If you use this project in your research:
 
 ```
 Let's Talk - RAG Chatbot with Empathy Training
 Bertelli, E. (2025)
-https://github.com/enricoconductive/let-s-talk-rag-bot
+https://github.com/enricoconductive/letstalk
 ```
 
-## Support
+## 💬 Support
 
-For issues, questions, or contributions, please open an issue on GitHub.
+- **Issues**: Open an issue on GitHub
+- **Questions**: See STUDENT_GUIDE.md troubleshooting section
+- **HuggingFace Status**: https://status.huggingface.co/
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
-Built for educational purposes. Developed at Lingnan University for communication and empathy training courses.
+Built for educational purposes at Lingnan University for communication and empathy training courses.
 
 ---
 
-**Status:** ✅ Fully functional | **Last Updated:** November 2025 | **Version:** Session 8 (HuggingFace compatible)
+**Status:** ✅ Fully functional
+**Version:** November 2025 (30 cells, conversation memory + visualizations)
+**Notebook:** `RAG_Chatbot_HuggingFace.ipynb`
