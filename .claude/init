@@ -1,0 +1,58 @@
+# RAG Chatbot Project - Trump Persona (Educational)
+
+This project creates a customizable RAG (Retrieval-Augmented Generation) chatbot for educational purposes.
+
+## Project Overview
+- **Purpose**: Educational RAG chatbot that students can customize with different personas
+- **Default Persona**: Donald Trump (example - easily changeable)
+- **Platform**: Google Colab (free tier)
+- **Technologies**: ChromaDB, Google Gemini API, Gradio, Sentence Transformers
+- **Cost**: 100% free - no subscriptions or paywalls
+
+## Current Status
+✅ Initial notebook created: `RAG_Chatbot_Trump_Persona.ipynb`
+- Complete end-to-end RAG implementation
+- Gradio chat interface
+- Simple text fallback interface
+- Comprehensive documentation
+- Student-friendly with detailed comments
+- Easy persona customization
+
+## Key Features
+1. PDF document processing from Google Drive
+2. Vector database with ChromaDB
+3. Semantic search using embeddings
+4. Persona-based responses via Google Gemini
+5. Dual interface options (Gradio UI + simple text)
+6. Adjustable response parameters (temperature, style, etc.)
+
+## Student Workflow
+1. Upload notebook to Google Colab
+2. Get free Google Gemini API key
+3. Upload PDFs to Google Drive
+4. Configure persona settings (Block 4)
+5. Run all cells sequentially
+6. Chat with personalized bot
+
+## Next Steps (Planned)
+- Additional features to be added per user request
+- Keep everything free and beginner-friendly
+- Maintain single-notebook structure
+
+## Technical Architecture
+```
+PDFs → Text Extraction → Chunking → Embeddings → ChromaDB
+                                                      ↓
+User Question → Query Embedding → Similarity Search → Context
+                                                      ↓
+                                    Context + Persona → Gemini API → Response
+```
+
+## Repository Structure
+```
+.
+├── RAG_Chatbot_Trump_Persona.ipynb    # Main notebook (ready to use)
+├── .claude/
+│   └── init                            # This file
+└── README.md                           # (To be created if needed)
+```
