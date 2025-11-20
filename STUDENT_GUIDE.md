@@ -105,6 +105,90 @@ An AI chatbot that:
 
 ---
 
+## Using Real-Time Empathy Feedback
+
+The chatbot now shows **live empathy analysis as you type**, helping you improve before sending!
+
+### What You'll See
+
+When you launch the chat interface (Cell 21), you'll see **two panels side-by-side**:
+
+- **Left Panel (2/3 width):** Chat conversation
+- **Right Panel (1/3 width):** Real-time empathy feedback
+
+### How It Works
+
+1. **Start typing** in the message box
+2. **Feedback updates automatically** after you pause (~300ms)
+3. **See your score** change in real-time (0-100 scale)
+4. **Get smart suggestions** based on what you're writing
+5. **Revise your message** before sending
+6. **Send** when you're happy with your score
+
+### Understanding the Live Score
+
+**Score Display:**
+- 🌟 **80-100:** Excellent empathy
+- ✅ **60-79:** Good empathy
+- ⚠️ **40-59:** Moderate empathy
+- 💡 **0-39:** Keep trying
+
+**Dimension Breakdown:**
+```
+💙 Warmth: 15/20
+❓ Questions: 10/20
+😊 Emotions: 8/20
+👁️ Perspective: 5/20
+👂 Listening: 12/20
+```
+
+### Smart Suggestions
+
+The feedback panel shows **context-aware tips** based on what you're typing:
+
+- **Low warmth:** 💡 "Try: 'I appreciate...' or 'Thank you for...'"
+- **Closed question:** 💡 "Better: Ask 'How...' or 'Why...' instead"
+- **Weak emotion recognition:** 💡 "Name the feeling: 'frustrated,' 'worried'"
+- **Missing perspective:** 💡 "Try: 'From your view...' or 'You might feel...'"
+- **Low listening:** 💡 "Show engagement: 'Tell me more' or paraphrase"
+
+### Example: Using Real-Time Feedback
+
+**❌ First Draft (Score: 25/100):**
+```
+Did you like the speech?
+```
+**Feedback:** ⚠️ Moderate - 25/100 | Closed question detected
+
+**✅ Revised (Score: 75/100):**
+```
+How did you feel about the key points in your speech?
+I'm curious about what motivated those ideas.
+```
+**Feedback:** ✅ Good - 75/100 | Open question ✓ | Emotion word ✓
+
+### Tips for Effective Use
+
+**✅ DO:**
+- Use feedback to **experiment** with different phrasings
+- **Revise before sending** - it's practice, not a test!
+- Try to hit **60+ points** consistently
+
+**❌ DON'T:**
+- Obsess over perfect scores (80+ is rare!)
+- Send immediately without checking feedback
+- Ignore suggestions - they're context-specific
+
+### Technical Details
+
+- **Analysis speed:** <10ms (nearly instant)
+- **Feedback updates:** ~300ms after you stop typing (debounced)
+- **Live feedback:** For practice only, doesn't affect final score
+- **Final score:** Calculated when you send the message
+- **10-message report:** Uses sent messages, not drafts
+
+---
+
 ## Testing Conversation Memory
 
 The chatbot can **remember previous messages** in your conversation, making follow-up questions work naturally.

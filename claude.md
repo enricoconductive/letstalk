@@ -456,6 +456,125 @@ messages.append({"role": "user", "content": question})  # Current question
 - No functional changes to core RAG implementation
 - Zero performance impact (debug disabled by default)
 
+### Session 10: REAL-TIME EMPATHY FEEDBACK (Current)
+**Date:** November 20, 2025
+**Branch:** `feature/real-time-empathy-feedback-v2`
+**Purpose:** Implement live empathy analysis as users type with smart coaching
+
+**User Request:** Add real-time empathy feedback - show score as you type with improvement suggestions.
+
+**Problem:** Current system only analyzes AFTER message is sent. Students can't revise before sending.
+
+**Discovery:**
+- EmpathyAnalyzer.analyze_message() works on any text (<10ms)
+- gr.ChatInterface doesn't expose textbox for event listeners
+- Need gr.Blocks for full UI control
+
+**Solution:** Complete rewrite of Cell 21 from gr.ChatInterface (~90 lines) to gr.Blocks (~400 lines).
+
+**Implementation:**
+
+1. ✅ **analyze_draft() function:**
+   - Analyzes text WITHOUT saving to history (non-persistent)
+   - Returns same 5-dimension analysis
+   - Called on every textbox.change() event
+
+2. ✅ **format_live_feedback() function:**
+   - Converts analysis to Markdown display
+   - Shows status: 🌟 (80+), ✅ (60-79), ⚠️ (40-59), 💡 (0-39)
+   - **Context-aware suggestions:**
+     - Low warmth → "Try: 'I appreciate...'"
+     - Closed question → "Ask 'How/Why' instead of 'Did'"
+     - No emotions → "Name feeling: 'frustrated,' 'worried'"
+     - Missing perspective → "Try: 'From your view...'"
+     - No listening → "Show engagement: 'Tell me more'"
+   - Max 3 suggestions (prevents overwhelming)
+
+3. ✅ **update_live_feedback() wrapper:**
+   - Gradio event handler wrapper
+   - Calls analyze_draft() + format_live_feedback()
+
+4. ✅ **chat_handler() async function:**
+   - Replaces chat_interface()
+   - Gets AI response (preserves memory, sources)
+   - Tracks FINAL empathy (saved to history)
+   - Updates progress (X/10 messages)
+   - Generates 10-message report
+   - Returns: (history, cleared_input, progress_text)
+
+5. ✅ **gr.Blocks two-panel layout:**
+   - **Left (2/3 width):**
+     - gr.Chatbot (height=500)
+     - gr.Textbox (user input, 2 lines)
+     - gr.Button ("Send", primary)
+     - gr.Markdown (progress display)
+     - gr.Examples (starter questions)
+   - **Right (1/3 width):**
+     - gr.Markdown header
+     - gr.Markdown feedback panel (live updates)
+
+6. ✅ **Event handlers:**
+   - `user_input.change()` → `update_live_feedback()` (debounced ~300ms)
+   - `send_btn.click()` → `chat_handler()` (submit)
+   - `user_input.submit()` → `chat_handler()` (Enter key)
+
+7. ✅ **Documentation:**
+   - Comprehensive teaching comments in Cell 21
+   - Updated STUDENT_GUIDE.md (+90 lines)
+   - Added Session 10 to claude.md
+
+**Technical Architecture:**
+
+**Real-Time Flow:**
+```
+User types → Pause ~300ms → .change() event
+    ↓
+analyze_draft() → EmpathyAnalyzer.analyze_message()
+    ↓
+format_live_feedback() → Markdown with suggestions
+    ↓
+feedback_panel updates (no lag)
+```
+
+**Submit Flow:**
+```
+User clicks Send/Enter
+    ↓
+chat_handler(user_message, history) [async]
+    ↓
+├─ generate_response_async() → AI response
+├─ empathy_analyzer.add_user_message() → FINAL score
+├─ Update history, clear input, progress
+└─ Generate report if 10 messages
+```
+
+**Key Features:**
+- ✅ Live score as you type
+- ✅ Context-aware coaching suggestions
+- ✅ Two-panel layout (chat + feedback)
+- ✅ Smart suggestion prioritization (top 3)
+- ✅ Debounced event handling (no lag)
+- ✅ Preserves all features (memory, sources, reports)
+- ✅ Comprehensive teaching comments
+
+**Files Modified:**
+- `RAG_Chatbot_HuggingFace.ipynb`:
+  - Cell 21: COMPLETE REWRITE (~90 → ~400 lines)
+  - 4 new functions + gr.Blocks layout + event handlers
+- `STUDENT_GUIDE.md`:
+  - Added "Using Real-Time Empathy Feedback" section (+90 lines)
+
+**Testing Status:**
+- ⏳ Implementation complete, awaiting Colab testing
+
+**Educational Value:**
+- Students see empathy markers before sending
+- Immediate feedback loop (write → analyze → revise)
+- Specific, actionable suggestions
+- Teaches 5 dimensions through practice
+
+**Result:** ✅ **Implementation complete!** Full real-time empathy feedback with smart coaching, two-panel UI, comprehensive documentation.
+
 ---
 
 ## 🔧 Technical Implementation Details
