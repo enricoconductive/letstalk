@@ -210,8 +210,7 @@ When `DEBUG_MEMORY = True`, you'll see:
 |-------|----------|
 | Bot doesn't remember context | Check `CONVERSATION_MEMORY > 0` in Cell 8 |
 | Debug output not showing | Set `DEBUG_MEMORY = True` in Cell 8 |
-| Memory seems too short | Increase CONVERSATION_MEMORY to 5 or 10 |
-| Responses too slow | Reduce CONVERSATION_MEMORY to 2 or 3 |
+| Memory too short/long | Adjust CONVERSATION_MEMORY (2-10) in Cell 8 |
 
 ---
 
