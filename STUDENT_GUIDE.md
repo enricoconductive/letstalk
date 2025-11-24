@@ -20,10 +20,10 @@ An AI chatbot that:
 
 1. **Open** https://colab.research.google.com/
 2. **Upload** `RAG_Chatbot_HuggingFace.ipynb`
-3. **Get HuggingFace token** (see below) → Paste in Cell 8
+3. **Get HuggingFace token** (see below) → Paste in Step 4 (Cell 8)
 4. **Click** "Runtime → Run All"
 5. **Authorize** Google Drive when prompted
-6. **If Cell 10 shows "Model loading":** Wait 30s, re-run Cell 10
+6. **If Step 5 shows "Model loading":** Wait 30s, re-run Step 5
 7. **Copy** public link: `https://xxxxx.gradio.live`
 8. **⚠️ Open link in NEW browser tab** (not in Colab)
 9. **Start chatting!**
@@ -41,7 +41,7 @@ An AI chatbot that:
 5. **Type:** **"Fine-grained"** ⚠️ (NOT "Read")
 6. **Enable:** ✅ "Make calls to Inference Providers" (under "Inference" section)
 7. **Copy** token (starts with `hf_`)
-8. **Paste** into Cell 8: `HUGGINGFACE_TOKEN = "hf_your_token"`
+8. **Paste** into Step 4 (Cell 8): `HUGGINGFACE_TOKEN = "hf_your_token"`
 
 ### ⚠️ Critical Requirements
 - **Token type MUST be "Fine-grained"** with "Inference" permission
@@ -64,7 +64,7 @@ An AI chatbot that:
 1. Click folder icon (left sidebar)
 2. Navigate to your PDF
 3. Right-click → "Copy path"
-4. Paste into Cell 8 `PDF_PATHS` list
+4. Paste into Step 4 (Cell 8) `PDF_PATHS` list
 
 ---
 
@@ -87,9 +87,10 @@ An AI chatbot that:
 
 ### Report & Export
 - **Report:** Generated after 10 messages
-- **CSV Export:** Run Cell 22
-- **Visualizations:** Run Cell 25 (line graph), Cell 27 (bar chart) - requires 3+ messages
-- **Reset:** Run Cell 24 (new conversation)
+- **CSV Export:** Run Step 12
+- **Visualizations:** Run Step 13 (all 3 graphs) - requires 3+ messages
+- **Export HTML:** Run Step 14 (save graphs as interactive HTML files)
+- **Reset:** Step 15 (commented out - uncomment to use)
 
 ### Tips to Improve Score
 
@@ -112,20 +113,15 @@ After chatting for **at least 3 messages**, you can view interactive graphs show
 
 ### Available Visualizations
 
-**Cell 25: Line Graph** - Shows empathy trend across all messages
-- Overall score progression
-- Interactive hover to see exact scores
-- HTML export available
-
-**Cell 27: Multi-Dimension Bar Chart** - Breakdown of 5 dimensions
-- Compare warmth, questions, emotions, perspective, listening
-- See which areas are strongest/weakest
-- Helps identify specific skills to improve
+**Step 13** displays three interactive graphs:
+1. **Line Graph** - Overall empathy score progression
+2. **Multi-Dimension Line Chart** - All 5 dimensions over time
+3. **Bar Chart** - Average scores by dimension
 
 ### How to View
 1. Send at least 3 messages in the chat
-2. Run **Cell 25** for line graph
-3. Run **Cell 27** for bar chart
+2. Run **Step 13** to see all 3 graphs
+3. Run **Step 14** to export graphs as HTML files (optional)
 4. Graphs appear below the cell with interactive features
 
 **💡 Tip:** After 10 messages (when report generates), visualizations become more meaningful!
@@ -138,7 +134,7 @@ The chatbot can **show which PDFs** were used to answer your question.
 
 ### How to Enable/Disable
 
-In **Cell 8**, find this setting:
+In **Step 4 (Cell 8)**, find this setting:
 ```python
 SHOW_SOURCES = True  # Set to False to hide sources
 ```
@@ -162,19 +158,19 @@ When enabled, the bot remembers recent exchanges:
 
 ### Default Setting
 - **CONVERSATION_MEMORY = 3** (remembers last 3 exchanges)
-- Stored in Cell 8
+- Stored in Step 4 (Cell 8)
 - Change to 0 to disable, or 5-10 for longer memory
 
 ### How to Test If Memory Works
 
 **Option 1: Live Test with Debug Mode**
-1. Set `DEBUG_MEMORY = True` in Cell 8
-2. Run all cells through Cell 20 (launch chat)
+1. Set `DEBUG_MEMORY = True` in Step 4
+2. Run all steps through Step 11 (launch chat)
 3. In the console, you'll see message structure for each response
 4. Check that history pairs are included
 
 **Option 2: Real Conversation Test**
-1. Launch chat (Cell 20)
+1. Launch chat (Step 11)
 2. Ask: **"What are your main beliefs?"**
 3. Bot answers
 4. Ask: **"Tell me more"** or **"Why is that important?"**
@@ -208,9 +204,9 @@ When `DEBUG_MEMORY = True`, you'll see:
 
 | Issue | Solution |
 |-------|----------|
-| Bot doesn't remember context | Check `CONVERSATION_MEMORY > 0` in Cell 8 |
-| Debug output not showing | Set `DEBUG_MEMORY = True` in Cell 8 |
-| Memory too short/long | Adjust CONVERSATION_MEMORY (2-10) in Cell 8 |
+| Bot doesn't remember context | Check `CONVERSATION_MEMORY > 0` in Step 4 |
+| Debug output not showing | Set `DEBUG_MEMORY = True` in Step 4 |
+| Memory too short/long | Adjust CONVERSATION_MEMORY (2-10) in Step 4 |
 
 ---
 
@@ -221,8 +217,8 @@ When `DEBUG_MEMORY = True`, you'll see:
 | Error | Cause | Fix |
 |-------|-------|-----|
 | **401/403 Invalid token** | Token lacks "Inference" permission | Create NEW "Fine-grained" token with "Inference" enabled |
-| **503 Model loading** | ✅ Normal on first call! | Wait 30s, re-run Cell 10. Subsequent: 5-10s |
-| **404 Not Found** | Model incompatible with API | Use `meta-llama/Meta-Llama-3.1-8B-Instruct` (Cell 8) |
+| **503 Model loading** | ✅ Normal on first call! | Wait 30s, re-run Step 5. Subsequent: 5-10s |
+| **404 Not Found** | Model incompatible with API | Use `meta-llama/Meta-Llama-3.1-8B-Instruct` (Step 4) |
 | **Rate limit** | Too many requests | Wait 10-15 minutes (free tier: 300/hour) |
 | **Timeout (30s)** | Slow connection or complex query | Try simpler question, check internet |
 
@@ -239,7 +235,7 @@ When `DEBUG_MEMORY = True`, you'll see:
 |-------|-----|
 | **Interface restarts** | ✅ Use PUBLIC link (`https://xxxxx.gradio.live`) in NEW tab, not in Colab |
 | **No empathy report** | Must send exactly 10 messages, check for error messages |
-| **Responses don't match persona** | Make `PERSONA_DESCRIPTION` more detailed (Cell 8), verify PDFs |
+| **Responses don't match persona** | Make `PERSONA_DESCRIPTION` more detailed (Step 4), verify PDFs |
 
 ---
 
@@ -250,12 +246,12 @@ When `DEBUG_MEMORY = True`, you'll see:
 ```
 First Setup → Run All → Authorize Drive → Wait for "Model loading" (30s)
            → Copy public link → Open in NEW tab → Start chatting
-After 10 messages → Run Cell 22 (export CSV) + Cell 25/27 (visualizations)
-Modify settings → Edit Cell 8 → Re-run from Cell 8 onwards
-New conversation → Run Cell 24 (reset)
+After 10 messages → Run Step 12 (CSV) + Step 13 (graphs) + Step 14 (HTML)
+Modify settings → Edit Step 4 → Re-run from Step 4 onwards
+New conversation → Uncomment Step 15 code and run
 ```
 
-### Key Settings (Cell 8)
+### Key Settings (Step 4)
 
 ```python
 MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B-Instruct"  # ✅ Verified working

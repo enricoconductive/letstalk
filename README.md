@@ -43,8 +43,8 @@ Works without VPN using HuggingFace API (~300 requests/hour, 100% free)
 4. **Start Chatting!**
    - Ask questions empathically
    - Receive feedback after 10 messages
-   - View interactive graphs (Cell 25)
-   - Export data as CSV (Cell 23)
+   - View interactive graphs (Step 13)
+   - Export data as CSV (Step 12)
 
 ## 📊 Empathy Dimensions Tracked
 
@@ -137,5 +137,5 @@ Built for educational purposes at Lingnan University for communication and empat
 ---
 
 **Status:** ✅ Fully functional
-**Version:** November 2025 (30 cells, conversation memory + visualizations)
+**Version:** November 2025 (30 cells, progressive step numbering 1-16)
 **Notebook:** `RAG_Chatbot_HuggingFace.ipynb`
