@@ -1,106 +1,93 @@
 # RAG Chatbot - Legal/Professional Version
 
-A streamlined RAG (Retrieval-Augmented Generation) chatbot for professional document Q&A.
+A streamlined RAG chatbot for legal document Q&A with **pre-loaded documents** (no setup required).
 
-## Overview
+## Workshop Scenario
 
-This is a simplified version of the main RAG chatbot, designed for:
-- Legal document analysis
-- Professional knowledge bases
-- Research document Q&A
-- Any document-based question answering
-
-**Key Differences from Main Version:**
-- No empathy tracking features
-- All configuration consolidated in one cell (Step 4)
-- Streamlined 9-step workflow (vs 16 steps)
-- 19 cells total (vs 30 cells)
+> You are a legal consultant helping clients going through divorce who ran a business together. Wife Lilly invested $50,000 into the business, but it has since gone into difficulties and husband/ex-husband David has been unable to repay Lilly.
 
 ## Quick Start
 
-1. Open `RAG_Chatbot_Legal.ipynb` in Google Colab
-2. Run Steps 1-3 (Install, Load, Connect Drive)
-3. Configure Step 4 (API token, persona, PDF paths)
-4. Run Steps 5-9 (Test, Process, Database, QA, Launch)
+**Direct Colab Link:**
+```
+https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Legal_Version/RAG_Chatbot_Legal.ipynb
+```
 
-## Structure
+**Setup Time:** ~5 minutes
+
+**Only 1 thing to configure:** Your HuggingFace API token
+
+## Steps
 
 | Step | Description | Time |
 |------|-------------|------|
 | 1 | Install Libraries | ~30 sec |
 | 2 | Load Libraries | ~5 sec |
-| 3 | Connect Google Drive | ~10 sec |
-| 4 | **Configuration** (all settings) | - |
+| 3 | **Download Documents** (automatic) | ~10 sec |
+| 4 | Configuration (API token only) | - |
 | 5 | Test API Connection | ~5 sec |
-| 6 | Read PDF Files | 1-2 min |
-| 7 | Create Search Database | 1-2 min |
+| 6 | Read PDF Files | ~30 sec |
+| 7 | Create Search Database | ~1 min |
 | 8 | Setup Question Answering | ~5 sec |
 | 9 | Launch Chat Interface | ~10 sec |
 
-## Configuration (Step 4)
+## Pre-loaded Documents
 
-All settings are organized into sections:
+Documents are automatically downloaded from public Google Drive links:
+
+| Document | Description |
+|----------|-------------|
+| Affidavit_Template.pdf | Legal affidavit template |
+| *(more coming)* | |
+
+### Adding More Documents
+
+In Step 3, add entries to `PDF_DOCUMENTS`:
 
 ```python
-# SECTION 1: API CREDENTIALS (REQUIRED)
-HUGGINGFACE_TOKEN = "hf_..."
-
-# SECTION 2: MODEL SETTINGS
-MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B-Instruct"
-TEMPERATURE = 0.7
-MAX_OUTPUT_TOKENS = 300
-
-# SECTION 3: PERSONA CONFIGURATION (REQUIRED)
-PERSONA_NAME = "Legal Expert"
-PERSONA_DESCRIPTION = "..."
-
-# SECTION 4: PDF DOCUMENTS (REQUIRED)
-PDF_PATHS = [...]
-
-# SECTION 5: RETRIEVAL SETTINGS
-NUM_RETRIEVED_DOCS = 7
-CHUNK_SIZE = 1000
-OVERLAP = 200
-
-# SECTION 6: CONVERSATION SETTINGS
-CONVERSATION_MEMORY = 3
-SHOW_SOURCES = True
-DEBUG_MEMORY = False
-
-# SECTION 7: STARTER QUESTIONS (OPTIONAL)
-STARTER_QUESTIONS = [...]
+PDF_DOCUMENTS = [
+    ("Affidavit_Template.pdf", "1z6fCNZEQloRI_uS6W_DxGJh6sSbBiJUA"),
+    ("Your_Document.pdf", "YOUR_GOOGLE_DRIVE_FILE_ID"),  # Add here
+]
 ```
 
-## Features
+**To get the FILE_ID:**
+1. Share the file on Google Drive ("Anyone with the link can view")
+2. Copy the share link: `https://drive.google.com/file/d/FILE_ID_HERE/view?usp=sharing`
+3. Extract the FILE_ID from the URL
 
-- **Source Citations**: See which PDFs were used for each answer
-- **Conversation Memory**: Follow-up questions work naturally
-- **30-Second Timeout**: Prevents indefinite hanging
-- **Debug Mode**: See exactly what's sent to the API
-
-## Requirements
-
-- Google Colab (free tier)
-- HuggingFace account (free, ~300 requests/hour)
-- PDF files in Google Drive
-
-## API Token Setup
+## HuggingFace Token Setup
 
 1. Go to https://huggingface.co/settings/tokens
 2. Click "Create new token"
-3. Select "Fine-grained"
-4. Enable "Make calls to Inference Providers"
+3. Select **"Fine-grained"**
+4. Enable **"Make calls to Inference Providers"**
 5. Copy the token (starts with `hf_`)
+
+## Features
+
+- **Pre-loaded documents** - No Google Drive mounting needed
+- **Source citations** - See which documents were used
+- **Conversation memory** - Follow-up questions work
+- **30-second timeout** - Prevents hanging
+- **Scenario-specific prompts** - Tailored for divorce/business disputes
+
+## Starter Questions
+
+- "What legal options does Lilly have to recover her $50,000 investment?"
+- "How should Lilly document her investment in the business for court?"
+- "What should be included in an affidavit for this case?"
+- "Can Lilly claim the investment as a marital asset in the divorce?"
+- "What evidence would strengthen Lilly's case for repayment?"
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
 | API 503 error | Model loading - wait 30 seconds |
-| API 401/403 error | Check token permissions |
-| No text from PDFs | Check file paths, ensure not password-protected |
-| Timeout errors | Try shorter questions |
-| Rate limit | Wait 10-15 minutes |
+| API 401/403 error | Check token has "Inference Providers" permission |
+| Download failed | Ensure Google Drive file is shared publicly |
+| Timeout errors | Try shorter/simpler questions |
 
 ## License
 
