@@ -28,7 +28,8 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 ### Step 4: Use the Chatbot
 - Open the Gradio link in a **new browser tab**
 - Ask questions about Lilly's case
-- Each response includes source citations
+- Each response includes source citations with relevant quotes
+- **Note:** The bot ONLY uses information from the loaded documents. If the answer isn't in the documents, it will tell you.
 
 ---
 
@@ -49,6 +50,7 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 | API 401/403 error | Token needs "Inference Providers" permission |
 | Empty responses | Try a different model in Step 4 |
 | Timeout | Ask shorter/simpler questions |
+| "Cannot find this" response | The answer isn't in the documents - this is expected behavior |
 
 ## Need Help?
 - Check your token has correct permissions
@@ -56,4 +58,4 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 - Try restarting the runtime: Runtime > Restart runtime
 
 ---
-*Licensed under CC BY-NC-SA 4.0 | Bertelli, E. (2025)*
+*Licensed under CC BY-NC-SA 4.0 | Bertelli, E. (2026)*

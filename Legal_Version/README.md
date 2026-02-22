@@ -33,28 +33,34 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 
 ## Pre-loaded Documents
 
-Documents are automatically downloaded from public Google Drive links:
-
-| Document | Description |
-|----------|-------------|
-| Affidavit_Template.pdf | Legal affidavit template |
-| *(more coming)* | |
+26 legal documents are automatically downloaded, covering:
+- Financial dispute resolution
+- Divorce grounds and procedures (Hong Kong)
+- Asset division in divorce
+- Maintenance/alimony assessment
+- Matrimonial property division
+- Personal injury awards in divorce
+- Affidavit templates
+- Marriage ordinance and registration
+- Cross-border divorce issues
 
 ### Adding More Documents
 
-In Step 3, add entries to `PDF_DOCUMENTS`:
+In Step 3, add entries to `DOCUMENTS` (supports PDF, DOCX, and Google Docs):
 
 ```python
-PDF_DOCUMENTS = [
-    ("Affidavit_Template.pdf", "1z6fCNZEQloRI_uS6W_DxGJh6sSbBiJUA"),
-    ("Your_Document.pdf", "YOUR_GOOGLE_DRIVE_FILE_ID"),  # Add here
+DOCUMENTS = [
+    # PDF/DOCX: ("filename", "GOOGLE_DRIVE_FILE_ID", "pdf" or "docx")
+    ("Your_Document.pdf", "YOUR_GOOGLE_DRIVE_FILE_ID", "pdf"),
+
+    # Google Docs: ("filename.txt", "GOOGLE_DOC_ID", "gdoc")
+    ("Your_Doc.txt", "YOUR_GOOGLE_DOC_ID", "gdoc"),
 ]
 ```
 
-**To get the FILE_ID:**
-1. Share the file on Google Drive ("Anyone with the link can view")
-2. Copy the share link: `https://drive.google.com/file/d/FILE_ID_HERE/view?usp=sharing`
-3. Extract the FILE_ID from the URL
+**To get IDs:**
+- **PDF/DOCX:** Share link `https://drive.google.com/file/d/FILE_ID/view` → extract FILE_ID
+- **Google Doc:** Doc URL `https://docs.google.com/document/d/DOC_ID/edit` → extract DOC_ID
 
 ## HuggingFace Token Setup
 
@@ -66,11 +72,12 @@ PDF_DOCUMENTS = [
 
 ## Features
 
-- **Pre-loaded documents** - No Google Drive mounting needed
-- **Source citations** - See which documents were used
+- **Pre-loaded documents** - 26 legal documents, no Google Drive mounting needed
+- **Anti-hallucination mode** - Strict document grounding; bot says "I cannot find this" if not in documents
+- **Source citations** - See which documents were used with relevant quote snippets
 - **Conversation memory** - Follow-up questions work
 - **30-second timeout** - Prevents hanging
-- **Scenario-specific prompts** - Tailored for divorce/business disputes
+- **Concise responses** - ~100 words max for clear, actionable advice
 
 ## Starter Questions
 
