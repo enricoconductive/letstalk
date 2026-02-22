@@ -12,9 +12,10 @@ A streamlined RAG (Retrieval-Augmented Generation) chatbot for legal document Q&
 
 - **Pre-loaded documents** - 26 legal documents automatically downloaded (no Google Drive mounting)
 - **Multi-format support** - PDF, DOCX, and Google Docs
-- **Source citations** - Shows document name, section number, and quoted text snippet
+- **Anti-hallucination mode** - Strict document grounding; bot says "I cannot find this" if not in documents
+- **Source citations** - Shows document name, section number, and relevant query-matched snippets
 - **Conversation memory** - Remembers last 3 exchanges for follow-up questions
-- **Concise responses** - ~100 words max for clear, actionable advice
+- **Concise responses** - ~100 words max (MAX_OUTPUT_TOKENS=100)
 - **30-second timeout** - Prevents hanging
 
 ## Technical Stack
@@ -50,7 +51,7 @@ HUGGINGFACE_TOKEN = "hf_..."
 
 # Model
 MODEL_NAME = "Qwen/Qwen2.5-72B-Instruct"
-MAX_OUTPUT_TOKENS = 125  # ~100 words
+MAX_OUTPUT_TOKENS = 100  # Reduced to enforce brevity
 
 # Retrieval
 NUM_RETRIEVED_DOCS = 7
@@ -61,6 +62,20 @@ OVERLAP = 200
 CONVERSATION_MEMORY = 3
 SHOW_SOURCES = True
 ```
+
+## Anti-Hallucination Design
+
+The bot uses strict document grounding to prevent hallucination:
+
+1. **System prompt** instructs the model to ONLY use provided context
+2. **Explicit fallback**: "I cannot find this in the provided documents"
+3. **No outside knowledge**: Model is told not to use pre-trained legal knowledge
+4. **Quote requirement**: Model should quote directly from documents
+5. **Concise responses**: MAX_OUTPUT_TOKENS=100 reduces rambling
+
+**Citation improvements:**
+- `extract_relevant_snippet()` finds query-relevant sentences instead of first 150 chars
+- Snippets are selected based on keyword overlap with the user's question
 
 ## Structure
 
