@@ -1,4 +1,4 @@
-# Student Guide - Legal RAG Chatbot
+# Student Guide - Legal Drafting Chatbot
 
 ## Quick Start (5 minutes)
 
@@ -19,7 +19,7 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 ### Step 3: Run the Notebook
 1. Run **Step 1** (Install) - wait ~30 seconds
 2. Run **Step 2** (Load) - instant
-3. Run **Step 3** (Download) - wait ~30 seconds for 26 documents
+3. Run **Step 3** (Download) - wait ~30 seconds for 28 documents
 4. Run **Step 4** (Config) - **paste your token here first!**
 5. Run **Step 5** (Test) - should say "SUCCESS!"
 6. Run **Steps 6-8** - wait ~2 minutes total
@@ -27,7 +27,7 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 
 ### Step 4: Use the Chatbot
 - Open the Gradio link in a **new browser tab**
-- Ask questions about Lilly's case
+- Ask questions about the Merritt v. Merritt case or petition drafting
 - Each response includes source citations with relevant quotes
 - **Note:** The bot ONLY uses information from the loaded documents. If the answer isn't in the documents, it will tell you.
 
@@ -35,12 +35,14 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 
 ## Workshop Scenario
 
-> Lilly invested $50,000 in a business with her husband David. They are now divorcing, and David cannot repay the investment. Help Lilly find legal remedies.
+> You are learning to draft a legally sound petition based on the landmark contract law case **Merritt v. Merritt**, using the IRAC method (Issue, Rule, Application, Conclusion). The chatbot will guide you through drafting best practices and the case facts.
 
 ## Example Questions
-- "What legal options does Lilly have to recover her investment?"
-- "How should Lilly document her investment for court?"
-- "Can Lilly claim the investment as a marital asset?"
+- "How do I apply the IRAC method to the Merritt v. Merritt case?"
+- "What are the key best practices for drafting a legal petition?"
+- "Can you review my argument about the intention to create legal relations in Merritt?"
+- "What should be included in the 'Application' section for this specific case?"
+- "How can I structure a two-paragraph petition to convince the judge the agreement is binding?"
 
 ## Troubleshooting
 

@@ -4,7 +4,7 @@ A streamlined RAG chatbot for legal document Q&A with **pre-loaded documents** (
 
 ## Workshop Scenario
 
-> You are a legal consultant helping clients going through divorce who ran a business together. Wife Lilly invested $50,000 into the business, but it has since gone into difficulties and husband/ex-husband David has been unable to repay Lilly.
+> You are facilitating a legal workshop focused on the landmark contract law case **Merritt v. Merritt**. Students are learning to draft legal petitions using the IRAC method, guided by petition best practices and the case materials.
 
 ## Quick Start
 
@@ -33,7 +33,7 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 
 ## Pre-loaded Documents
 
-26 legal documents are automatically downloaded, covering:
+28 legal documents are automatically downloaded, covering:
 - Financial dispute resolution
 - Divorce grounds and procedures (Hong Kong)
 - Asset division in divorce
@@ -43,6 +43,8 @@ https://colab.research.google.com/github/enricoconductive/letstalk/blob/main/Leg
 - Affidavit templates
 - Marriage ordinance and registration
 - Cross-border divorce issues
+- **Petition drafting best practices** (workshop-specific)
+- **Merritt v. Merritt case materials** (workshop-specific)
 
 ### Adding More Documents
 
@@ -59,8 +61,8 @@ DOCUMENTS = [
 ```
 
 **To get IDs:**
-- **PDF/DOCX:** Share link `https://drive.google.com/file/d/FILE_ID/view` → extract FILE_ID
-- **Google Doc:** Doc URL `https://docs.google.com/document/d/DOC_ID/edit` → extract DOC_ID
+- **PDF/DOCX:** Share link `https://drive.google.com/file/d/FILE_ID/view` -> extract FILE_ID
+- **Google Doc:** Doc URL `https://docs.google.com/document/d/DOC_ID/edit` -> extract DOC_ID
 
 ## HuggingFace Token Setup
 
@@ -72,20 +74,22 @@ DOCUMENTS = [
 
 ## Features
 
-- **Pre-loaded documents** - 26 legal documents, no Google Drive mounting needed
+- **Pre-loaded documents** - 28 legal documents, no Google Drive mounting needed
+- **Legal Drafting Educator persona** - Professional tone, IRAC-focused guidance
 - **Anti-hallucination mode** - Strict document grounding; bot says "I cannot find this" if not in documents
+- **Document routing** - Uses Petition Best Practices for drafting, Merritt case for facts
 - **Source citations** - See which documents were used with relevant quote snippets
 - **Conversation memory** - Follow-up questions work
 - **30-second timeout** - Prevents hanging
-- **Concise responses** - ~100 words max for clear, actionable advice
+- **Concise responses** - ~200 words max for clear, actionable advice
 
 ## Starter Questions
 
-- "What legal options does Lilly have to recover her $50,000 investment?"
-- "How should Lilly document her investment in the business for court?"
-- "What should be included in an affidavit for this case?"
-- "Can Lilly claim the investment as a marital asset in the divorce?"
-- "What evidence would strengthen Lilly's case for repayment?"
+- "How do I apply the IRAC method to the Merritt v. Merritt case?"
+- "What are the key best practices for drafting a legal petition?"
+- "Can you review my argument about the intention to create legal relations in Merritt?"
+- "What should be included in the 'Application' section for this specific case?"
+- "How can I structure a two-paragraph petition to convince the judge the agreement is binding?"
 
 ## Troubleshooting
 

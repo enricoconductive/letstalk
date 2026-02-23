@@ -2,21 +2,22 @@
 
 ## Overview
 
-A streamlined RAG (Retrieval-Augmented Generation) chatbot for legal document Q&A, specifically designed for divorce and business dispute scenarios.
+A streamlined RAG (Retrieval-Augmented Generation) chatbot for legal document Q&A, designed as a legal drafting educator for the Merritt v. Merritt case study workshop.
 
 ## Workshop Scenario
 
-> You are a legal consultant helping clients going through divorce who ran a business together. Wife Lilly invested $50,000 into the business, but it has since gone into difficulties and husband/ex-husband David has been unable to repay Lilly.
+> You are facilitating a legal workshop focused on the landmark contract law case Merritt v. Merritt. Students are learning to draft legal petitions using the IRAC method, guided by petition best practices and the case materials.
 
 ## Features
 
-- **Pre-loaded documents** - 26 legal documents automatically downloaded (no Google Drive mounting)
+- **Pre-loaded documents** - 28 legal documents automatically downloaded (no Google Drive mounting)
 - **Multi-format support** - PDF, DOCX, and Google Docs
 - **Anti-hallucination mode** - Strict document grounding; bot says "I cannot find this" if not in documents
 - **Source citations** - Shows document name, section number, and relevant query-matched snippets
 - **Conversation memory** - Remembers last 3 exchanges for follow-up questions
-- **Concise responses** - ~100 words max (MAX_OUTPUT_TOKENS=100)
+- **Concise responses** - ~200 words max (MAX_OUTPUT_TOKENS=300)
 - **30-second timeout** - Prevents hanging
+- **Document routing** - Uses Petition Best Practices for drafting guidance, Merritt v. Merritt for case facts
 
 ## Technical Stack
 
@@ -30,7 +31,7 @@ A streamlined RAG (Retrieval-Augmented Generation) chatbot for legal document Q&
 
 ## Document Library
 
-26 legal documents covering:
+28 legal documents covering:
 - Financial dispute resolution
 - Divorce grounds and procedures (Hong Kong)
 - Asset division in divorce
@@ -40,6 +41,8 @@ A streamlined RAG (Retrieval-Augmented Generation) chatbot for legal document Q&
 - Affidavit templates
 - Marriage ordinance and registration
 - Cross-border divorce issues
+- **Petition drafting best practices** (workshop-specific)
+- **Merritt v. Merritt case materials** (workshop-specific)
 
 ## Configuration
 
@@ -51,7 +54,7 @@ HUGGINGFACE_TOKEN = "hf_..."
 
 # Model
 MODEL_NAME = "Qwen/Qwen2.5-72B-Instruct"
-MAX_OUTPUT_TOKENS = 100  # Reduced to enforce brevity
+MAX_OUTPUT_TOKENS = 300  # ~200 words max
 
 # Retrieval
 NUM_RETRIEVED_DOCS = 7
@@ -63,6 +66,14 @@ CONVERSATION_MEMORY = 3
 SHOW_SOURCES = True
 ```
 
+## Persona
+
+The bot operates as a **Legal Drafting Educator** with a structured persona:
+
+- **[PERSONA]** - Professional Legal Practitioner and Educator. Direct, objective, no filler or praise.
+- **[CONTEXT]** - Facilitating a Merritt v. Merritt workshop. Knowledge base relies on Petition_Best_Practices.txt and Merritt_v_Merritt.txt.
+- **[TASK]** - Review student arguments, guide IRAC-method petition drafting, correct grammar, route answers to the correct source document.
+
 ## Anti-Hallucination Design
 
 The bot uses strict document grounding to prevent hallucination:
@@ -71,7 +82,8 @@ The bot uses strict document grounding to prevent hallucination:
 2. **Explicit fallback**: "I cannot find this in the provided documents"
 3. **No outside knowledge**: Model is told not to use pre-trained legal knowledge
 4. **Quote requirement**: Model should quote directly from documents
-5. **Concise responses**: MAX_OUTPUT_TOKENS=100 reduces rambling
+5. **Document routing**: Petition Best Practices for structure/drafting, Merritt case for facts/legal grounds
+6. **Concise responses**: MAX_OUTPUT_TOKENS=300 (~200 words) keeps answers focused
 
 **Citation improvements:**
 - `extract_relevant_snippet()` finds query-relevant sentences instead of first 150 chars
@@ -101,7 +113,7 @@ The bot uses strict document grounding to prevent hallucination:
 | Document source | Google Drive mount | Public URL download |
 | Steps | 16 | 9 |
 | Cells | 30 | 19 |
-| Focus | Empathy training | Legal Q&A |
+| Focus | Empathy training | Legal drafting (IRAC) |
 
 ## Cost
 
